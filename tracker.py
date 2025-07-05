@@ -6,16 +6,23 @@ from keywords import keywords  # Your keyword list
 
 # === Telegram Info ===
 BOT_TOKEN = "8175144603:AAG5Zaeu4cdqyMhMZl0aBuoPWQGRjQkwEo8"
-CHAT_ID = "6321858073"
+CHAT_ID = "1856328073"
 
 def send_telegram_alert(message):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": CHAT_ID,
-        "text": message,
-        "parse_mode": "HTML"
-    }
-    requests.post(url, data=payload)
+    try:
+        with open('chat_ids.txt', 'r') as file:
+            chat_ids = file.read().splitlines()
+    except FileNotFoundError:
+        chat_ids = []
+
+    for chat_id in chat_ids:
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+        payload = {
+            "chat_id": chat_id,
+            "text": message,
+            "parse_mode": "HTML"
+        }
+        requests.post(url, data=payload)
 
 def is_keyword_match(product_name):
     name_lower = product_name.lower()
